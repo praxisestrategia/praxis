@@ -17,9 +17,7 @@
       --primary: #007BFF;
       --primary-dark: #0056b3;
       --bg-light: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      --bg-dark: #121212;
       --text-light: #333;
-      --text-dark: #f1f1f1;
       --max-width: 450px;
       --radius: 5px;
       --gap: 10px;
@@ -40,12 +38,6 @@
       flex-direction: column;
       align-items: center;
       padding: 40px;
-      transition: background var(--transition), color var(--transition);
-    }
-
-    body.night-mode {
-      background: var(--bg-dark);
-      color: var(--text-dark);
     }
 
     h2 {
@@ -53,13 +45,14 @@
       font-size: 2rem;
     }
 
-    #toolbar {
-      margin-bottom: 20px;
+    #toolbar, #optionsContainer {
       display: flex;
       gap: var(--gap);
+      margin-bottom: 20px;
     }
 
-    #toolbar button {
+    #toolbar button,
+    #downloadBtn {
       padding: 8px 12px;
       font-size: 1rem;
       border: none;
@@ -70,15 +63,18 @@
       transition: background-color var(--transition);
     }
 
-    #toolbar button:hover {
+    #toolbar button:hover,
+    #downloadBtn:hover {
       background: var(--primary-dark);
     }
 
-    #userSelect {
-      margin-bottom: 20px;
+    #userSelect,
+    #fontSizeSelect {
       font-size: 1rem;
       padding: 6px 10px;
       border-radius: var(--radius);
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
     }
 
     #tweetContainer {
@@ -88,9 +84,8 @@
       border-radius: 30px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
       padding: 10px;
-      overflow: hidden;
-      transition: height var(--transition);
       margin-bottom: 20px;
+      overflow: hidden;
     }
 
     #tweetHeader {
@@ -98,7 +93,6 @@
       align-items: center;
       gap: 15px;
       margin-bottom: 15px;
-      font-family: "Helvetica Neue", sans-serif;
     }
 
     #tweetHeader img {
@@ -118,12 +112,10 @@
     }
 
     #tweetText {
-      font-family: "Segoe UI", sans-serif;
       font-size: 20px;
       line-height: 1.4;
       padding: 10px;
       border: 1px dashed transparent;
-      transition: border-color var(--transition);
       min-height: 60px;
       white-space: pre-wrap;
       word-wrap: break-word;
@@ -144,35 +136,8 @@
       color: #555;
     }
 
-    #optionsContainer {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    #fontSizeSelect {
-      padding: 5px 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      background: #fff;
-    }
-
     #downloadBtn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: var(--radius);
-      background: var(--primary);
-      color: #fff;
-      cursor: pointer;
-      transition: background var(--transition);
       display: none;
-    }
-
-    #downloadBtn:hover {
-      background: var(--primary-dark);
     }
 
     @media (max-width: 600px) {
@@ -194,11 +159,9 @@
 
       #tweetText {
         font-size: 18px;
-        padding: 8px;
       }
 
       #toolbar button {
-        padding: 6px 10px;
         font-size: .9rem;
       }
 
@@ -218,12 +181,12 @@
     <option value="omao">O Mundo Aqui</option>
     <option value="antibolso">AntiBolsonaro</option>
     <option value="absurda">Absurdamente</option>
+    <option value="soudeesquerda">Sou de Esquerda</option>
   </select>
 
   <div id="toolbar">
     <button data-cmd="bold"><strong>B</strong></button>
     <button data-cmd="underline"><u>U</u></button>
-    <button id="nightModeBtn">Modo Noturno</button>
   </div>
 
   <div id="tweetContainer">
@@ -253,17 +216,17 @@
   <button id="downloadBtn">Download PNG</button>
 
   <script>
-    const tweetContainer = document.getElementById('tweetContainer');
     const tweetText = document.getElementById('tweetText');
     const charCount = document.getElementById('charCount');
     const downloadBtn = document.getElementById('downloadBtn');
     const fontSizeSelect = document.getElementById('fontSizeSelect');
-    const nightModeBtn = document.getElementById('nightModeBtn');
     const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
     const profileImg = document.getElementById('profileImg');
     const profileName = document.getElementById('profileName');
     const profileHandle = document.getElementById('profileHandle');
     const userSelect = document.getElementById('userSelect');
+    const tweetContainer = document.getElementById('tweetContainer');
+
     const maxChars = 340;
 
     const profiles = {
@@ -291,31 +254,26 @@
         name: 'Absurdamente Cotidiano',
         handle: '@absurdamentecotidiano',
         img: 'absurda.jpg'
+      },
+      soudeesquerda: {
+        name: 'Sou de Esquerda',
+        handle: '@soudeesquerda_',
+        img: 'profileSDE.jpeg'
       }
     };
 
     function loadProfile(key) {
       const profile = profiles[key];
-      profileImg.src = profile.img;
-      profileName.textContent = profile.name;
-      profileHandle.textContent = profile.handle;
+      if (profile) {
+        profileImg.src = profile.img;
+        profileName.textContent = profile.name;
+        profileHandle.textContent = profile.handle;
+      }
     }
 
     function adjustHeight() {
       tweetContainer.style.height = 'auto';
       tweetContainer.style.height = tweetContainer.scrollHeight + 'px';
-    }
-
-    function update() {
-      let text = tweetText.textContent;
-      if (text.length > maxChars) {
-        text = text.slice(0, maxChars);
-        tweetText.textContent = text;
-        placeCaretAtEnd(tweetText);
-      }
-      charCount.textContent = `${maxChars - text.length} caracteres restantes`;
-      adjustHeight();
-      downloadBtn.style.display = text.trim() ? 'inline-block' : 'none';
     }
 
     function placeCaretAtEnd(el) {
@@ -328,25 +286,30 @@
       sel.addRange(range);
     }
 
-    toolbarBtns.forEach(btn => {
+    function updateText() {
+      let text = tweetText.textContent;
+      if (text.length > maxChars) {
+        tweetText.textContent = text.slice(0, maxChars);
+        placeCaretAtEnd(tweetText);
+      }
+      charCount.textContent = `${maxChars - tweetText.textContent.length} caracteres restantes`;
+      adjustHeight();
+      downloadBtn.style.display = tweetText.textContent.trim() ? 'inline-block' : 'none';
+    }
+
+    toolbarBtns.forEach(btn =>
       btn.addEventListener('click', () => {
         document.execCommand(btn.dataset.cmd);
-        update();
-      });
-    });
-
-    nightModeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('night-mode');
-      nightModeBtn.textContent = document.body.classList.contains('night-mode') ? 'Modo Claro' : 'Modo Noturno';
-      update();
-    });
+        updateText();
+      })
+    );
 
     fontSizeSelect.addEventListener('change', () => {
       tweetText.style.fontSize = fontSizeSelect.value;
       adjustHeight();
     });
 
-    tweetText.addEventListener('input', update);
+    tweetText.addEventListener('input', updateText);
 
     downloadBtn.addEventListener('click', () => {
       adjustHeight();
@@ -360,9 +323,10 @@
 
     userSelect.addEventListener('change', () => loadProfile(userSelect.value));
 
+    // Inicialização
     loadProfile(userSelect.value);
     tweetText.style.fontSize = fontSizeSelect.value;
-    update();
+    updateText();
   </script>
 </body>
 </html>
