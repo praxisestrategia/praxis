@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fake-X</title>
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#15202b">
+  <meta name="theme-color" content="#F7F9F9">
   <link rel="icon" href="./icons/praxis.png" type="image/png">
   <link rel="apple-touch-icon" href="./icons/icon-180.png" sizes="180x180">
   
@@ -19,22 +19,7 @@
   <style>
     /* Theme Variables */
     :root {
-      /* Dark Theme (Default) */
-      --bg-body: #15202B;
-      --bg-surface: #000000;
-      --bg-surface-hover: #192734;
-      --text-main: #FFFFFF;
-      --text-muted: #8B98A5;
-      --border-color: #38444D;
-      --primary-color: #1D9BF0;
-      --primary-hover: #1A8CD8;
-      
-      --radius-container: 16px;
-      --radius-button: 9999px;
-      --transition-speed: 0.2s;
-    }
-
-    body.light-theme {
+      /* Light Theme (Default) */
       --bg-body: #F7F9F9;
       --bg-surface: #FFFFFF;
       --bg-surface-hover: #F7F9F9;
@@ -43,6 +28,10 @@
       --border-color: #EFF3F4;
       --primary-color: #1D9BF0;
       --primary-hover: #1A8CD8;
+      
+      --radius-container: 16px;
+      --radius-button: 9999px;
+      --transition-speed: 0.2s;
     }
 
     * {
@@ -76,26 +65,6 @@
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.5px;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 8px 12px;
-      border-radius: var(--radius-button);
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all var(--transition-speed);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .theme-toggle:hover {
-      background-color: var(--bg-surface-hover);
     }
 
     .controls-panel {
@@ -280,9 +249,6 @@
 
   <div class="app-header">
     <h2>Fake-X</h2>
-    <button id="themeToggle" class="theme-toggle">
-      <span id="themeIcon">☀️</span> Light Mode
-    </button>
   </div>
 
   <div class="controls-panel">
@@ -340,7 +306,6 @@
     const profileHandle = document.getElementById('profileHandle');
     const userSelect = document.getElementById('userSelect');
     const tweetContainer = document.getElementById('tweetContainer');
-    const themeToggle = document.getElementById('themeToggle');
 
     const maxChars = 340;
 
@@ -356,21 +321,6 @@
       joaopaulo: { name: 'João Paulo ⭐', handle: '@joaopaulodopt', img: 'profileJoaoPaulo.jpg' },
       profnilson: { name: 'Professor Nilson', handle: '@vellazquez', img: 'profNilson.jpg' }
     };
-
-    // Theme Toggle Logic
-    let isDarkTheme = true;
-    themeToggle.addEventListener('click', () => {
-      isDarkTheme = !isDarkTheme;
-      if (isDarkTheme) {
-        document.body.classList.remove('light-theme');
-        themeToggle.innerHTML = '<span id="themeIcon">☀️</span> Light Mode';
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", "#15202b");
-      } else {
-        document.body.classList.add('light-theme');
-        themeToggle.innerHTML = '<span id="themeIcon">🌙</span> Dark Mode';
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", "#F7F9F9");
-      }
-    });
 
     function loadProfile(key) {
       const profile = profiles[key];
