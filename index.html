@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,14 +9,14 @@
   <meta name="theme-color" content="#F7F9F9">
   <link rel="icon" href="./icons/praxis.png" type="image/png">
   <link rel="apple-touch-icon" href="./icons/icon-180.png" sizes="180x180">
-  
+
   <!-- Modern Typography: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-  
+
   <style>
     /* Theme Variables */
     :root {
@@ -28,7 +29,7 @@
       --border-color: #EFF3F4;
       --primary-color: #1D9BF0;
       --primary-hover: #1A8CD8;
-      
+
       --radius-container: 16px;
       --radius-button: 9999px;
       --transition-speed: 0.2s;
@@ -78,10 +79,11 @@
       background-color: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    select, button {
+    select,
+    button {
       font-family: 'Inter', sans-serif;
     }
 
@@ -127,9 +129,9 @@
       width: 100%;
       max-width: 500px;
       background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-container);
-      padding: 16px;
+      border: none;
+      border-radius: 0;
+      padding: 24px;
       margin-bottom: 16px;
       position: relative;
       overflow: hidden;
@@ -138,13 +140,13 @@
     #tweetHeader {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 16px;
+      margin-bottom: 20px;
     }
 
     #profileImg {
-      width: 48px;
-      height: 48px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       object-fit: cover;
       background-color: var(--border-color);
@@ -157,13 +159,13 @@
     }
 
     #profileName {
-      font-size: 1.05rem;
+      font-size: 1.5rem;
       font-weight: 700;
       line-height: 1.2;
     }
 
     #profileHandle {
-      font-size: 0.95rem;
+      font-size: 1.25rem;
       color: var(--text-muted);
       line-height: 1.2;
       margin-top: 2px;
@@ -218,33 +220,45 @@
       background-color: var(--primary-hover);
     }
 
-    #tweetText b, #tweetText strong { font-weight: 700; }
-    #tweetText u { text-decoration: underline; }
+    #tweetText b,
+    #tweetText strong {
+      font-weight: 700;
+    }
+
+    #tweetText u {
+      text-decoration: underline;
+    }
 
     @media (max-width: 600px) {
       body {
         padding: 20px 15px;
       }
+
       .controls-panel {
         flex-direction: column;
       }
+
       select {
         width: 100%;
       }
+
       .format-btn {
         padding: 10px;
       }
+
       .format-group {
         display: flex;
         gap: 8px;
         width: 100%;
       }
+
       .format-group button {
         flex: 1;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div class="app-header">
@@ -344,16 +358,16 @@
     }
 
     function updateText() {
-      let text = tweetText.innerText || tweetText.textContent; 
-      
+      let text = tweetText.innerText || tweetText.textContent;
+
       if (text.length > maxChars) {
         tweetText.textContent = text.slice(0, maxChars);
         placeCaretAtEnd(tweetText);
       }
-      
+
       const currentLength = (tweetText.innerText || tweetText.textContent).length;
       charCount.textContent = `${maxChars - currentLength} caracteres restantes`;
-      
+
       if (currentLength > 0) {
         downloadBtn.style.display = 'block';
       } else {
@@ -374,7 +388,7 @@
     });
 
     tweetText.addEventListener('input', updateText);
-    
+
     tweetText.addEventListener('paste', (e) => {
       e.preventDefault();
       const text = (e.originalEvent || e).clipboardData.getData('text/plain');
@@ -384,10 +398,10 @@
     downloadBtn.addEventListener('click', () => {
       // Ensure the text cursor doesn't appear in the screenshot
       tweetText.blur();
-      
-      html2canvas(tweetContainer, { 
-        scale: 3, 
-        backgroundColor: null
+
+      html2canvas(tweetContainer, {
+        scale: 3,
+        backgroundColor: '#FFFFFF'
       }).then(canvas => {
         const link = document.createElement('a');
         link.download = 'conteudo_fake_x.png';
@@ -407,4 +421,5 @@
     updateText();
   </script>
 </body>
+
 </html>
